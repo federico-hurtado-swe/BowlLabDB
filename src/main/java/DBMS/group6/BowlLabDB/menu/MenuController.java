@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import DBMS.group6.BowlLabDB.menu.models.MenuItem;
 import jakarta.validation.Valid;
 
 
@@ -23,38 +24,40 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/menu")
 public class MenuController {   
-    
-    private final MenuRepository menuRepository;
 
-    public MenuController(MenuRepository menuRepository) {
-        this.menuRepository = menuRepository;
+    private final MenuService menuService;
+    
+    public MenuController(MenuService menuService) {
+        this.menuService = menuService;
     }
 
     @GetMapping("/find/all") // GET 
     List<MenuItem> findAll() {
-        return menuRepository.findAll();
+        // TODO: implement this in MenuService
+        return null;
     }
 
     @GetMapping("/find/{id}") 
     MenuItem findById(@PathVariable Integer id) {
-        return menuRepository.findById(id);
+        return null;
+        // TODO: implement this in MenuService
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/addItem")
     void addItem(@Valid @RequestBody MenuItem menuItem) { // requires a valid MenuItem as the request body or else returns 404
-        menuRepository.addItem(menuItem);
+        // TODO: implement this in MenuService
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/updateItem/{id}")
     void updateItem(@Valid @RequestBody MenuItem menuItem, @PathVariable Integer id) {
-        menuRepository.updateItem(menuItem, id);
+        // TODO: implement this in MenuService
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("delete/{id}")
     void delete(@PathVariable Integer id) {
-        menuRepository.deleteItem(id);
+        // TODO: implement this in MenuService
     }
 }

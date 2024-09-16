@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: "postgres:latest" # need to specify a version here
+    environment:
+      - "POSTGRES_DB=bowl-lab-db"
+      - "POSTGRES_PASSWORD=bowl-lab-password"
+      - "POSTGRES_USER=bowl-lab-group"
+    ports:
+      - "1234:5432"

@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import DBMS.group6.BowlLabDB.menu.models.MenuItem;
+
 /*
  * This class is responsible for managing the storing/retrieval of 
  * data within the menu. Currently, this is being done with an ArrayList, but
