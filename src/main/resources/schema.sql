@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS Employees (
 
 CREATE TABLE IF NOT EXISTS Menu (
     id SERIAL PRIMARY KEY,
+    name VARCHAR(250) NOT NULL,
     ingredients TEXT NOT NULL, -- unlimited characters
     description TEXT NOT NULL,
     price FLOAT NOT NULL,
