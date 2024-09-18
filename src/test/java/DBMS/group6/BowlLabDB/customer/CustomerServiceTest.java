@@ -34,7 +34,7 @@ public class CustomerServiceTest {
 
     @BeforeEach
     void setUp() {
-        customerOne = new Customer(1, "Customer", "One", "CustomerOne@gmail.com", "111-111-1111", "PasswordOne");
+        customerOne = new Customer(1, "Customer", "One", "CustomerOne@gmail.com", "111-111-1111", "PasswordOne", List.of(1), 0 );
      
     }
 

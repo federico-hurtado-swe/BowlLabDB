@@ -1,5 +1,5 @@
 package DBMS.group6.BowlLabDB.customer;
-
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -27,7 +27,7 @@ public class CustomerRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        customerOne = new Customer(1, "Customer", "One", "CustomerOne@gmail.com", "111-111-1111", "PasswordOne");
+        customerOne = new Customer(1, "Customer", "One", "CustomerOne@gmail.com", "111-111-1111", "PasswordOne", List.of(1), 0 );
         customerRepository.create(customerOne);
     }
 

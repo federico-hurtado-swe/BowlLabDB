@@ -39,7 +39,7 @@ public class CustomerControllerTest {
 
     @BeforeEach
     void setUp() {
-        Customer customerOne = new Customer(1, "Customer", "One", "CustomerOne@gmail.com", "111-111-1111", "PasswordOne");
+        Customer customerOne = new Customer(1, "Customer", "One", "CustomerOne@gmail.com", "111-111-1111", "PasswordOne", List.of(1), 0 );
         customers.add(customerOne);
     }
 

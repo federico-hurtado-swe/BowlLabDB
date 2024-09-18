@@ -2,6 +2,7 @@ package DBMS.group6.BowlLabDB.customer;
 
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,8 +66,14 @@ public class CustomerController {
      * Customer log in endpoint.
      */
     @PostMapping("/login")
-    void logIn(@Valid @RequestBody CustomerLoginCredentials credentials) {
-        customerService.logIn(credentials.email(), credentials.password());
+    ResponseEntity<String> logIn(@Valid @RequestBody CustomerLoginCredentials credentials) {
+        boolean success = customerService.logIn(credentials.email(), credentials.password());
+
+        if (success) {
+            return ResponseEntity.ok("Login successful");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login Failed");
+        }
     }
 
 
