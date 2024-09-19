@@ -10,6 +10,9 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+
 import DBMS.group6.BowlLabDB.customer.customerExceptions.CustomerNotFoundException;
 import DBMS.group6.BowlLabDB.customer.models.Customer;
 
@@ -47,25 +50,24 @@ public class CustomerRepository {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO Customers(id, firstName, lastName, email, phone, passkey, previous_orders, rewards_points) values (?,?,?,?,?,?,?,?)"
+                "INSERT INTO Customers(firstName, lastName, email, phone, passkey, previous_orders, rewards_points) VALUES (?,?,?,?,?,?,?)"
             );
-
-            ps.setInt(1, customer.id());
-            ps.setString(2, customer.firstName());
-            ps.setString(3, customer.lastName());
-            ps.setString(4, customer.email().toLowerCase());
-            ps.setString(5, customer.phone());
-            ps.setString(6, customer.passkey());
-
+    
+            ps.setString(1, customer.firstName());
+            ps.setString(2, customer.lastName());
+            ps.setString(3, customer.email().toLowerCase());
+            ps.setString(4, customer.phone());
+            ps.setString(5, customer.passkey());
+    
             // Convert List<Integer> to PostgreSQL array
             Array previousOrdersArray = connection.createArrayOf("INTEGER", customer.previousOrders().toArray());
-            ps.setArray(7, previousOrdersArray);
-            
-            ps.setInt(8, customer.rewardsPoints());
+            ps.setArray(6, previousOrdersArray);
+    
+            ps.setInt(7, customer.rewardsPoints());
             return ps;
-
         });
-
+    
+        // Since we are not using KeyHolder, we do not get the generated ID back.
         Assert.state(true, "Failed to create customer");
     }
 
