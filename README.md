@@ -8,7 +8,8 @@
 
 ## Commands (do in this order)
 
-1. Connect to DB: docker-compose up
+1. Connect to DB: docker-compose up 
+    ## you can also do docker-compose up -d to run in detached mode
 2. Compile project: mvn compile
 3. Build project: mvn clean package
 4. Run project: mvn spring-boot:run
