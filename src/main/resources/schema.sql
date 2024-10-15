@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS Customers (
     email VARCHAR(250) NOT NULL UNIQUE,
     phone VARCHAR(250) NOT NULL,
     passkey VARCHAR(250) NOT NULL,
-    previous_orders INTEGER[],
     rewards_points INTEGER DEFAULT 0
 );
 
@@ -39,13 +38,11 @@ CREATE TABLE IF NOT EXISTS Reviews (
 
 CREATE TABLE IF NOT EXISTS Orders (
     id SERIAL PRIMARY KEY,
-    items INTEGER[] NOT NULL, -- menu item id
-    prepared_by INTEGER NOT NULL, -- employee id
     ordered_by INTEGER NOT NULL, -- customer id
     date_ordered TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     total_price FLOAT NOT NULL,
     total_reward_points INTEGER NOT NULL,
-    CONSTRAINT fk_employee FOREIGN KEY (prepared_by) REFERENCES Employees(id) ON DELETE SET NULL,
+    order_complete BOOLEAN DEFAULT FALSE,
     CONSTRAINT fk_customer_orders FOREIGN KEY (ordered_by) REFERENCES Customers(id) ON DELETE CASCADE -- if customer deleted, all their orders are deleted too
 );
 
@@ -54,4 +51,19 @@ CREATE TABLE IF NOT EXISTS Reservations (
     reservation_time TIMESTAMP NOT NULL, -- combined date and time
     reserved_by INTEGER NOT NULL, -- customer id
     CONSTRAINT fk_customer_reservations FOREIGN KEY (reserved_by) REFERENCES Customers(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS OrderItems (
+    order_id INTEGER NOT NULL,
+    item_id INTEGER NOT NULL,
+    CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES Orders(id) ON DELETE CASCADE,
+    CONSTRAINT fk_menu_item FOREIGN KEY (item_id) REFERENCES Menu(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS CustomerOrders (
+    customer_id INTEGER NOT NULL,
+    order_id INTEGER NOT NULL,
+    CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES Customers(id) ON DELETE CASCADE,
+    CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES Orders(id) ON DELETE CASCADE
 );
