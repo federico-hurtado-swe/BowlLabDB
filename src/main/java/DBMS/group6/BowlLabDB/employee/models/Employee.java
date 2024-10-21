@@ -10,6 +10,6 @@ public record Employee(
     @NotEmpty String lastName,   // cannot be empty
     @Email @NotEmpty String email,  // must be a valid email and not empty
     @NotEmpty String phone,      // cannot be empty, add regex if needed
-    @NotEmpty String address,    // cannot be empty
+    @NotEmpty String addr,    // cannot be empty
     @NotEmpty String passkey     // cannot be empty
 ) {}

@@ -8,7 +8,7 @@
 
 ## Commands (do in this order)
 
-1. docker-compose down
+1. docker-compose down -v
 2. mvn spring-boot:run
 
 ## endpoints needed:

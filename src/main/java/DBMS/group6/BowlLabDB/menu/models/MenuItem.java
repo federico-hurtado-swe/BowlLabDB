@@ -3,6 +3,7 @@ package DBMS.group6.BowlLabDB.menu.models;
 import org.springframework.data.annotation.Id;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 /*
@@ -10,10 +11,9 @@ import jakarta.validation.constraints.Positive;
  * that are included in a MenuItem.
  */
 public record MenuItem(
-        @Id Integer id,
-        @NotEmpty String name,
-        @NotEmpty String description,
-        @Positive @NotEmpty double price,
-        @Positive Integer rewardValue) {
+                @Id Integer id,
+                @NotEmpty String name,
+                @NotEmpty String description,
+                @NotNull @Positive double price) {
 
 }

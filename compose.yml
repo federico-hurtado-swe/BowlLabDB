@@ -7,3 +7,8 @@ services:
       - "POSTGRES_USER=bowl-lab-group"
     ports:
       - "1234:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  #Added this line to persist data
+
+volumes:
+  postgres_data:
