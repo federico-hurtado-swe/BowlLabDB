@@ -13,15 +13,6 @@
 
 ## endpoints needed:
 
-### Menu
-
-1. get all items
-2. add item
-3. update item
-   - do update by id and pass in the new item in the request body
-4. delete item by id
-5. find item by id
-
 ### Order
 
 1. create order

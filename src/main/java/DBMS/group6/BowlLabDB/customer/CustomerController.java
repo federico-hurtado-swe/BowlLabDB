@@ -29,7 +29,6 @@ public class CustomerController {
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
-    
 
     @GetMapping("/find/all")
     List<Customer> findAll() {
@@ -48,14 +47,12 @@ public class CustomerController {
         this.customerService.registerCustomer(customer);
     }
 
-
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/update/{id}")
     void update(@Valid @RequestBody Customer customer, @PathVariable Integer id) {
         // TODO: implement this in customerService
     }
 
-    
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/delete/{id}")
     void delete(@PathVariable Integer id) {
@@ -66,22 +63,21 @@ public class CustomerController {
      * Customer log in endpoint.
      */
     @PostMapping("/login")
-    ResponseEntity<String> logIn(@Valid @RequestBody CustomerLoginCredentials credentials) {
-        boolean success = customerService.logIn(credentials.email(), credentials.password());
+    Customer logIn(@Valid @RequestBody CustomerLoginCredentials credentials) {
+        Customer customer = customerService.logIn(credentials.email(), credentials.password());
 
-        if (success) {
-            return ResponseEntity.ok("Login successful");
+        if (customer != null) {
+            return customer;
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login Failed");
+            return null; // return null if customer not found
         }
     }
-
 
     // --------- Exception Handling --------------
 
     // Handle EmailAlreadyExistsException with a 409 code always
     @ExceptionHandler(EmailAlreadyExistsException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)  // 409 Conflict
+    @ResponseStatus(HttpStatus.CONFLICT) // 409 Conflict
     public String handleEmailAlreadyExists(EmailAlreadyExistsException ex) {
         return ex.getMessage();
     }
