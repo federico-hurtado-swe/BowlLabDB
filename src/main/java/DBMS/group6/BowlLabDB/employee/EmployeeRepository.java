@@ -22,17 +22,14 @@ public class EmployeeRepository {
      * Return list of all employees
      */
     public List<Employee> findAll() {
-        return jdbcTemplate.query("SELECT * FROM Employee", (rs, rowNum) ->
-            new Employee(
+        return jdbcTemplate.query("SELECT * FROM Employees", (rs, rowNum) -> new Employee(
                 rs.getInt("id"),
                 rs.getString("first_name"),
                 rs.getString("last_name"),
                 rs.getString("email"),
                 rs.getString("phone"),
                 rs.getString("address"),
-                rs.getString("passkey")
-            )
-        );
+                rs.getString("passkey")));
     }
 
     /*
@@ -41,8 +38,7 @@ public class EmployeeRepository {
     public void create(Employee employee) {
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO Employee(first_name, last_name, email, phone, address, password) VALUES (?,?,?,?,?,?)"
-            );
+                    "INSERT INTO Employee(first_name, last_name, email, phone, address, password) VALUES (?,?,?,?,?,?)");
             ps.setString(1, employee.firstName());
             ps.setString(2, employee.lastName());
             ps.setString(3, employee.email().toLowerCase());
@@ -53,43 +49,39 @@ public class EmployeeRepository {
         });
     }
 
-
     /*
      * Find employee by ID
      */
-    @SuppressWarnings("deprecation") 
+    @SuppressWarnings("deprecation")
     public Employee findById(int id) {
         String sql = "SELECT * FROM Employee WHERE employeeID = ?";
         try {
-            return jdbcTemplate.queryForObject(sql, new Object[]{id}, (rs, rowNum) ->
-                new Employee(
+            return jdbcTemplate.queryForObject(sql, new Object[] { id }, (rs, rowNum) -> new Employee(
                     rs.getInt("id"),
                     rs.getString("first_name"),
                     rs.getString("last_name"),
                     rs.getString("email"),
                     rs.getString("phone"),
                     rs.getString("address"),
-                    rs.getString("passkey")
-                )
-            );
+                    rs.getString("passkey")));
         } catch (EmptyResultDataAccessException e) {
             return null; // employee not found
         }
-    } 
-    
+    }
+
     /*
      * Update an existing employee
      */
     public void update(Employee employee) {
         String sql = "UPDATE Employee SET first_name = ?, last_name = ?, email = ?, phone = ?, address = ?, password = ?, approved_by = ? WHERE employeeID = ?";
         jdbcTemplate.update(sql,
-            employee.firstName(),
-            employee.lastName(),
-            employee.email().toLowerCase(),
-            employee.phone(),
-            employee.address(),
-            employee.passkey()
-          
+                employee.firstName(),
+                employee.lastName(),
+                employee.email().toLowerCase(),
+                employee.phone(),
+                employee.address(),
+                employee.passkey()
+
         );
     }
 
@@ -104,32 +96,29 @@ public class EmployeeRepository {
     /*
      * Validate login credentials (email and password)
      */
-    @SuppressWarnings("deprecation") 
+    @SuppressWarnings("deprecation")
     public boolean validateLogin(String email, String password) {
         String sql = "SELECT COUNT(*) FROM Employee WHERE email = ? AND password = ?";
-        Integer count = jdbcTemplate.queryForObject(sql, new Object[]{email.toLowerCase(), password}, Integer.class);
+        Integer count = jdbcTemplate.queryForObject(sql, new Object[] { email.toLowerCase(), password }, Integer.class);
         return count != null && count > 0;
     }
 
     /*
-    * Find Employee in the DB by using their email.
-    */
+     * Find Employee in the DB by using their email.
+     */
     @SuppressWarnings("deprecation")
     public Employee findEmployeeByEmail(String email) {
         String sql = "SELECT * FROM Employee WHERE email = ?";
 
         try {
-            return jdbcTemplate.queryForObject(sql, new Object[]{email.toLowerCase()}, (rs, rowNum) ->
-                new Employee(
+            return jdbcTemplate.queryForObject(sql, new Object[] { email.toLowerCase() }, (rs, rowNum) -> new Employee(
                     rs.getInt("id"),
                     rs.getString("first_name"),
                     rs.getString("last_name"),
                     rs.getString("email"),
                     rs.getString("phone"),
                     rs.getString("address"),
-                    rs.getString("passkey")
-                )
-            );
+                    rs.getString("passkey")));
         } catch (EmptyResultDataAccessException e) {
             return null; // employee not found
         }

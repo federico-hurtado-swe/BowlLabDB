@@ -10,12 +10,10 @@ import jakarta.validation.constraints.Positive;
  * that are included in a MenuItem.
  */
 public record MenuItem(
-    @Id Integer id, 
-    @NotEmpty String name,
-    @NotEmpty String ingredients, // comma separated list in String form
-    @NotEmpty String description,
-    @Positive @NotEmpty double price,
-    @Positive Integer rewardValue 
-) {
+        @Id Integer id,
+        @NotEmpty String name,
+        @NotEmpty String description,
+        @Positive @NotEmpty double price,
+        @Positive Integer rewardValue) {
 
 }

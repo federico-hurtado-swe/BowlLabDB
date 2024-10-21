@@ -8,13 +8,39 @@
 
 ## Commands (do in this order)
 
-1. Connect to DB: docker-compose up
-2. Compile project: mvn compile
-3. Build project: mvn clean package
-4. Run project: mvn spring-boot:run
+1. docker-compose down
+2. mvn spring-boot:run
 
-### Notes
+## endpoints needed:
 
-- The data is only persited as long as the docker container is running. If you terminate Docker,
-  the data will be lost. I think there is a way to make it so that docker stores this data
-  forever, but I haven't looked into it yet.
+### Menu
+
+1. get all items
+2. add item
+3. update item
+   - do update by id and pass in the new item in the request body
+4. delete item by id
+5. find item by id
+
+### Order
+
+1. create order
+   - will be given the name of the customer who makes the order and a list of item ids
+   - need to populate the order table and populate the OrderItems table
+2. View all orders that are not completed
+3. View all orders for the day (complete and not)
+4. View all orders for a customer (all orders w/ a customer id)
+
+### Reservations
+
+1. Create reservations
+2. View all reservations for a date range
+   - have the request body take startDate and endDate
+3. View all current customer reservations
+   - reservations by a customer that are not in the past.
+
+### Reviews
+
+1. Create review
+2. View all reviews
+3. View all reviews written by a customer

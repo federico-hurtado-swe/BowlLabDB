@@ -18,29 +18,24 @@ import DBMS.group6.BowlLabDB.customer.models.Customer;
 
 @Repository
 public class CustomerRepository {
-    
+
     private final JdbcTemplate jdbcTemplate;
 
     public CustomerRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-    
+
     /*
      * Return list of all customers
      */
     public List<Customer> findAll() {
-        return jdbcTemplate.query("SELECT * FROM Customers", (rs, rowNum) ->
-            new Customer(
+        return jdbcTemplate.query("SELECT * FROM Customers", (rs, rowNum) -> new Customer(
                 rs.getInt("id"),
                 rs.getString("firstName"),
                 rs.getString("lastName"),
                 rs.getString("email"),
                 rs.getString("phone"),
-                rs.getString("passkey"),
-                List.of((Integer[]) rs.getArray("previous_orders").getArray()),  // Cast SQL Array to List<Integer>
-                rs.getInt("rewards_points")
-            )
-        );
+                rs.getString("passkey")));
     }
 
     /*
@@ -50,23 +45,16 @@ public class CustomerRepository {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO Customers(firstName, lastName, email, phone, passkey, previous_orders, rewards_points) VALUES (?,?,?,?,?,?,?)"
-            );
-    
+                    "INSERT INTO Customers(firstName, lastName, email, phone, passkey) VALUES (?,?,?,?,?)");
+
             ps.setString(1, customer.firstName());
             ps.setString(2, customer.lastName());
             ps.setString(3, customer.email().toLowerCase());
             ps.setString(4, customer.phone());
             ps.setString(5, customer.passkey());
-    
-            // Convert List<Integer> to PostgreSQL array
-            Array previousOrdersArray = connection.createArrayOf("INTEGER", customer.previousOrders().toArray());
-            ps.setArray(6, previousOrdersArray);
-    
-            ps.setInt(7, customer.rewardsPoints());
             return ps;
         });
-    
+
         // Since we are not using KeyHolder, we do not get the generated ID back.
         Assert.state(true, "Failed to create customer");
     }
@@ -75,13 +63,12 @@ public class CustomerRepository {
      * Return true if a customer w/ a given email exists
      */
     public boolean emailExistsInDB(String email) {
-    
+
         Integer count = jdbcTemplate.queryForObject(
-            "SELECT COUNT(*) FROM Customers WHERE email = ?", 
-            Integer.class, 
-            email.toLowerCase()
-        );
-        
+                "SELECT COUNT(*) FROM Customers WHERE email = ?",
+                Integer.class,
+                email.toLowerCase());
+
         return count != null && count > 0;
     }
 
@@ -94,22 +81,16 @@ public class CustomerRepository {
         String sql = "SELECT * FROM Customers WHERE email = ?";
 
         try {
-            return jdbcTemplate.queryForObject(sql, new Object[]{email.toLowerCase()}, (rs, rowNum) -> 
-                new Customer(
+            return jdbcTemplate.queryForObject(sql, new Object[] { email.toLowerCase() }, (rs, rowNum) -> new Customer(
                     rs.getInt("id"),
                     rs.getString("firstName"),
                     rs.getString("lastName"),
                     rs.getString("email"),
                     rs.getString("phone"),
-                    rs.getString("passkey"),
-                    List.of((Integer[]) rs.getArray("previous_orders").getArray()),  // Cast SQL Array to List<Integer>
-                    rs.getInt("rewards_points")
-                )
-            );
+                    rs.getString("passkey")));
         } catch (EmptyResultDataAccessException e) {
             return null; // customer not found.
         }
     }
-
 
 }
