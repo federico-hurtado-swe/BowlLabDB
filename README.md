@@ -21,11 +21,12 @@
 2. View all orders that are not completed
 3. View all orders for the day (complete and not)
 4. View all orders for a customer (all orders w/ a customer id)
+5. mark an order as complete
 
 ### Reservations
 
 1. Create reservations
-2. View all reservations for a date range
+2. View all AVAILABLE reservations for a date range
    - have the request body take startDate and endDate
 3. View all current customer reservations
    - reservations by a customer that are not in the past.
