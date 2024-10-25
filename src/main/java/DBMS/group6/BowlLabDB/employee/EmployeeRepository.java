@@ -72,16 +72,15 @@ public class EmployeeRepository {
      * Update an existing employee
      */
     public void update(Employee employee) {
-        String sql = "UPDATE Employees SET firstName = ?, lastName = ?, email = ?, phone = ?, addr = ?, passkey = ?, WHERE id = ?";
+        String sql = "UPDATE Employees SET firstName = ?, lastName = ?, email = ?, phone = ?, addr = ?, passkey = ? WHERE id = ?";
         jdbcTemplate.update(sql,
                 employee.firstName(),
                 employee.lastName(),
                 employee.email().toLowerCase(),
                 employee.phone(),
                 employee.addr(),
-                employee.passkey()
-
-        );
+                employee.passkey(),
+                employee.id());
     }
 
     /*
