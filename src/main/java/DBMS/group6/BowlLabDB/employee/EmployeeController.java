@@ -28,7 +28,6 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-
     // /find/all
     @GetMapping("/find/all")
     List<Employee> findAll() {
@@ -52,28 +51,28 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/update/{id}")
     void update(@Valid @RequestBody Employee employee, @PathVariable Integer id) {
-        employeeService.updateEmployee(employee, id); 
+        employeeService.updateEmployee(employee, id);
     }
 
     // /delete/{id}
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/delete/{id}")
     void delete(@PathVariable Integer id) {
-        employeeService.deleteEmployee(id); 
+        employeeService.deleteEmployee(id);
     }
-    
+
     // /login
     /*
      * Customer log in endpoint.
      */
     @PostMapping("/login")
-    ResponseEntity<String> logIn(@Valid @RequestBody EmployeeLoginCredentials credentials) {
-        boolean success = employeeService.logIn(credentials.email(), credentials.password());
+    Employee logIn(@Valid @RequestBody EmployeeLoginCredentials credentials) {
+        Employee employee = employeeService.logIn(credentials.email(), credentials.password());
 
-        if (success) {
-            return ResponseEntity.ok("Login successful");
+        if (employee != null) {
+            return employee;
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login Failed");
+            return null;
         }
     }
 }

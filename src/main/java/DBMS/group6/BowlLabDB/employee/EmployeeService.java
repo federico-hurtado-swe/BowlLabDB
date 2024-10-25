@@ -30,7 +30,7 @@ public class EmployeeService {
     /*
      * Log in an employee.
      */
-    public boolean logIn(String email, String password) throws EmployeeNotFoundException {
+    public Employee logIn(String email, String password) throws EmployeeNotFoundException {
 
         // find employee by email
         Employee employee = this.employeeRepository.findEmployeeByEmail(email);
@@ -40,7 +40,12 @@ public class EmployeeService {
         }
 
         // make sure the passwords match
-        return (employee.passkey().equals(password));
+        if (employee.passkey().equals(password)) {
+            return employee;
+        } else {
+            return null;
+        }
+
     }
 
     /*
@@ -85,5 +90,5 @@ public class EmployeeService {
             throw new EmployeeNotFoundException("Cannot update. Employee with ID " + id + " not found.");
         }
     }
-    
+
 }
