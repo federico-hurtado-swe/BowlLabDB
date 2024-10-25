@@ -42,13 +42,22 @@ public class MenuRepository {
     // Save or update a menu item
     public void save(MenuItem menuItem) {
         String sql = """
-                INSERT INTO menu (name, description, price)
-                VALUES (?, ?, ?)
+                INSERT INTO menu (id, name, description, price)
+                VALUES (?, ?, ?, ?)
                 ON CONFLICT (id) DO UPDATE
                 SET name = EXCLUDED.name,
                     description = EXCLUDED.description,
                     price = EXCLUDED.price
                 """;
+        jdbcTemplate.update(sql,
+                menuItem.id(),
+                menuItem.name(),
+                menuItem.description(),
+                menuItem.price());
+    }
+
+    public void addItem(MenuItem menuItem) {
+        String sql = "INSERT INTO menu (name, description, price) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql,
                 menuItem.name(),
                 menuItem.description(),

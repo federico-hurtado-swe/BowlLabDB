@@ -27,7 +27,7 @@ public class MenuService {
 
     // Add a new menu item
     public void addItem(MenuItem menuItem) {
-        menuRepository.save(menuItem);
+        menuRepository.addItem(menuItem);
     }
 
     // Update an existing menu item by ID
