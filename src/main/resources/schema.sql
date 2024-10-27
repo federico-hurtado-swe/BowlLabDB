@@ -45,8 +45,7 @@ CREATE TABLE IF NOT EXISTS Orders (
 CREATE TABLE IF NOT EXISTS Reservations (
     id SERIAL PRIMARY KEY,
     reservation_time TIMESTAMP NOT NULL, -- combined date and time
-    reserved_by INTEGER NOT NULL, -- customer id
-    CONSTRAINT fk_customer_reservations FOREIGN KEY (reserved_by) REFERENCES Customers(id) ON DELETE CASCADE
+    customer_id INTEGER REFERENCES Customers(id) ON DELETE CASCADE -- add this column and set a foreign key relationship
 );
 
 
@@ -110,10 +109,9 @@ INSERT INTO OrderItems (order_id, item_id) VALUES
 (5, 5);
 
 
--- Insert sample data into Reservations
-INSERT INTO Reservations (reservation_time, reserved_by) VALUES
-('2024-10-17 19:00:00', 1), -- Reservation for customer with ID 1
-('2024-10-18 20:30:00', 2), -- Reservation for customer with ID 2
-('2024-10-19 18:00:00', 3), -- Reservation for customer with ID 3
-('2024-10-20 21:00:00', 4), -- Reservation for customer with ID 4
-('2024-10-21 19:30:00', 5); -- Reservation for customer with ID 5
+-- Insert sample data into Reservations 
+INSERT INTO Reservations (reservation_time, customer_id) VALUES
+('2024-10-27 19:00:00', 1),
+('2024-10-28 20:00:00', 2),
+('2024-10-30 19:00:00', 3),
+('2024-10-31 21:00:00', 4);
