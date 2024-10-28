@@ -23,13 +23,13 @@ public class ReservationService {
         // Validate time and date constraints
         LocalTime time = reservationTime.toLocalTime();
         if (time.isBefore(LocalTime.of(17, 0)) || time.isAfter(LocalTime.of(21, 59))) {
-            return false;  // Not within allowed time range
+            return false; // Not within allowed time range
         }
 
         LocalDate today = LocalDate.now();
         if (reservationTime.toLocalDate().isBefore(today.plusDays(1)) ||
                 reservationTime.toLocalDate().isAfter(today.plusDays(7))) {
-            return false;  // Date not within 1-week range
+            return false; // Date not within 1-week range
         }
 
         // Check if slot is available
@@ -59,4 +59,10 @@ public class ReservationService {
     public List<Reservation> getCustomerReservations(Integer customerId) {
         return reservationRepository.findReservationsByCustomer(customerId);
     }
+
+    // Get all reservations for a specific day
+    public List<Reservation> getDailyReservations(LocalDate day) {
+        return reservationRepository.findReservationsByDay(day);
+    }
+
 }

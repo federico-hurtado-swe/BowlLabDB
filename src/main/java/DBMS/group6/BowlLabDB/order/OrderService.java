@@ -42,7 +42,6 @@ public class OrderService {
         return orderRepository.findByCustomer(custID);
     }
 
-
     // Mark order as complete
     public void markComplete(Integer id) {
         if (orderRepository.orderExistsById(id)) {

@@ -32,27 +32,39 @@ public class ReservationRepository {
         jdbcTemplate.update(sql, reservationTime, customerId);
     }
 
-    // Find all reserved slots for a given day, excluding customer-specific reservations
+    // Find all reserved slots for a given day, excluding customer-specific
+    // reservations
     @SuppressWarnings("deprecation")
     public List<LocalDateTime> findReservedSlotsByDay(LocalDate day) {
         LocalDateTime dayStart = day.atTime(17, 0); // Start at 5 PM
-        LocalDateTime dayEnd = day.atTime(22, 0);   // End at 10 PM
+        LocalDateTime dayEnd = day.atTime(22, 0); // End at 10 PM
 
         String sql = "SELECT reservation_time FROM Reservations WHERE reservation_time BETWEEN ? AND ?";
-        return jdbcTemplate.query(sql, new Object[]{dayStart, dayEnd}, (rs, rowNum) ->
-                rs.getTimestamp("reservation_time").toLocalDateTime()
-        );
+        return jdbcTemplate.query(sql, new Object[] { dayStart, dayEnd },
+                (rs, rowNum) -> rs.getTimestamp("reservation_time").toLocalDateTime());
     }
 
     // Find all reservations by a specific customer
     @SuppressWarnings("deprecation")
     public List<Reservation> findReservationsByCustomer(Integer customerId) {
         String sql = "SELECT * FROM Reservations WHERE customer_id = ?";
-        return jdbcTemplate.query(sql, new Object[]{customerId}, (rs, rowNum) ->
-                new Reservation(
+        return jdbcTemplate.query(sql, new Object[] { customerId }, (rs, rowNum) -> new Reservation(
+                rs.getInt("id"),
+                rs.getTimestamp("reservation_time").toLocalDateTime(),
+                rs.getInt("customer_id")));
+    }
+
+    // Find all reservations for a specific day
+    @SuppressWarnings("deprecation")
+    public List<Reservation> findReservationsByDay(LocalDate day) {
+        LocalDateTime dayStart = day.atTime(0, 0); // Start of the day
+        LocalDateTime dayEnd = day.atTime(23, 59); // End of the day
+
+        String sql = "SELECT * FROM Reservations WHERE reservation_time BETWEEN ? AND ?";
+        return jdbcTemplate.query(sql, new Object[] { dayStart, dayEnd },
+                (rs, rowNum) -> new Reservation(
                         rs.getInt("id"),
                         rs.getTimestamp("reservation_time").toLocalDateTime(),
-                        rs.getInt("customer_id")
-                ));
+                        rs.getInt("customer_id")));
     }
 }

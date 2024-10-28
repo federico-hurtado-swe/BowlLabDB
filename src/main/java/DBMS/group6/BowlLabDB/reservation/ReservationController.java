@@ -22,7 +22,7 @@ public class ReservationController {
     // Create a new reservation
     @PostMapping("/create")
     public ResponseEntity<String> createReservation(@RequestParam LocalDateTime reservationTime,
-                                                    @RequestParam Integer customerId) {
+            @RequestParam Integer customerId) {
         boolean isReserved = reservationService.requestReservation(reservationTime, customerId);
         if (isReserved) {
             return ResponseEntity.status(HttpStatus.CREATED).body("Reservation successful");
@@ -43,5 +43,11 @@ public class ReservationController {
     public ResponseEntity<List<Reservation>> getCustomerReservations(@PathVariable Integer customerId) {
         List<Reservation> reservations = reservationService.getCustomerReservations(customerId);
         return ResponseEntity.ok(reservations);
+    }
+
+    @GetMapping("/date/{day}")
+    public ResponseEntity<List<Reservation>> getDailyReservations(@PathVariable LocalDate day) {
+        List<Reservation> dailyReservations = reservationService.getDailyReservations(day);
+        return ResponseEntity.ok(dailyReservations);
     }
 }
