@@ -27,8 +27,9 @@ public class ReservationService {
         }
 
         LocalDate today = LocalDate.now();
-        if (reservationTime.toLocalDate().isBefore(today.plusDays(1)) ||
+        if (reservationTime.toLocalDate().isBefore(today) ||
                 reservationTime.toLocalDate().isAfter(today.plusDays(7))) {
+            System.out.println("Failed here");
             return false; // Date not within 1-week range
         }
 
