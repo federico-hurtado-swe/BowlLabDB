@@ -47,10 +47,9 @@ public class CustomerController {
         this.customerService.registerCustomer(customer);
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/update/{id}")
-    void update(@Valid @RequestBody Customer customer, @PathVariable Integer id) {
-        // TODO: implement this in customerService
+    Customer update(@Valid @RequestBody Customer customer, @PathVariable Integer id) {
+        return customerService.updateCustomer(customer, id);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

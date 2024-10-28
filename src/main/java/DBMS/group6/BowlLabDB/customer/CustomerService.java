@@ -70,8 +70,14 @@ public class CustomerService {
     public void deleteCustomer() {
     }
 
-    public void updateCustomer(Customer customer, Integer id) {
+    public Customer updateCustomer(Customer customer, Integer id) throws CustomerNotFoundException {
+        Customer existingCustomer = customerRepository.getCustomerById(id);
+        if (existingCustomer == null) {
+            throw new CustomerNotFoundException("Customer with ID " + id + " not found.");
+        }
 
+        customerRepository.updateCustomer(customer, id);
+        return customer;
     }
 
 }

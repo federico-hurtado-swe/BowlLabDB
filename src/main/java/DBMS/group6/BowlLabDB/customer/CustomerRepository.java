@@ -93,4 +93,37 @@ public class CustomerRepository {
         }
     }
 
+    @SuppressWarnings("deprecation")
+    public Customer getCustomerById(int id) {
+
+        String sql = "SELECT * FROM Customers WHERE id = ?";
+
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[] { id }, (rs, rowNum) -> new Customer(
+                    rs.getInt("id"),
+                    rs.getString("firstName"),
+                    rs.getString("lastName"),
+                    rs.getString("email"),
+                    rs.getString("phone"),
+                    rs.getString("passkey")));
+        } catch (EmptyResultDataAccessException e) {
+            return null; // customer not found.
+        }
+    }
+
+    public void updateCustomer(Customer customer, Integer id) {
+        String sql = "UPDATE Customers SET firstName = ?, lastName = ?, email = ?, phone = ?, passkey = ? WHERE id = ?";
+
+        int rowsUpdated = jdbcTemplate.update(sql,
+                customer.firstName(),
+                customer.lastName(),
+                customer.email().toLowerCase(),
+                customer.phone(),
+                customer.passkey(),
+                id);
+
+        // Verify the update was successful
+        Assert.state(rowsUpdated == 1, "Failed to update customer with ID " + id);
+    }
+
 }

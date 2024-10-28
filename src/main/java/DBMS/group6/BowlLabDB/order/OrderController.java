@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import DBMS.group6.BowlLabDB.order.models.Order;
 import DBMS.group6.BowlLabDB.order.models.OrderItem;
+import DBMS.group6.BowlLabDB.order.models.OrderResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -31,19 +32,19 @@ public class OrderController {
 
     // /find/unfinished
     @GetMapping("/find/unfinished")
-    List<Order> findAllUnfinished() {
+    List<OrderResponse> findAllUnfinished() {
         return this.orderService.findAllUnfinished();
     }
 
     // /find/{date}
     @GetMapping("/findByDate/{date}")
-    List<Order> findByDate(@PathVariable LocalDate date) {
+    List<OrderResponse> findByDate(@PathVariable LocalDate date) {
         return this.orderService.findByDate(date);
     }
 
     // /find/{custId}
     @GetMapping("/findByCustomer/{custId}")
-    List<Order> findByCustomer(@PathVariable Integer custId) {
+    List<OrderResponse> findByCustomer(@PathVariable Integer custId) {
         return this.orderService.findByCustomer(custId);
     }
 
@@ -56,11 +57,11 @@ public class OrderController {
 
     // /create
     // {
-    //     "custID": 1,
-    //     "orderItems": [
-    //         { "item_id": 1 },
-    //         { "item_id": 2 }
-    //     ]
+    // "custID": 1,
+    // "orderItems": [
+    // { "item_id": 1 },
+    // { "item_id": 2 }
+    // ]
     // }
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/create")
