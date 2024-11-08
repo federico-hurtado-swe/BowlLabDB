@@ -77,11 +77,17 @@ INSERT INTO Employees (firstName, lastName, email, phone, addr, passkey) VALUES
 
 -- Insert sample data into Menu
 INSERT INTO Menu (name, description, price) VALUES
-('Margherita Pizza', 'Classic Italian pizza with fresh ingredients.', 12.99),
-('Caesar Salad', 'Crisp romaine with a traditional Caesar dressing.', 8.99),
-('Spaghetti Bolognese', 'A hearty Italian pasta dish.', 14.99),
-('Cheeseburger', 'Juicy cheeseburger with fresh toppings.', 10.99),
-('Grilled Chicken Sandwich', 'Healthy grilled chicken sandwich.', 11.99);
+('Bulgogi Beef Bowl', 'Marinated beef with rice, kimchi, and vegetables.', 12.99),
+('Spicy Pork Bowl', 'Korean-style spicy pork with rice and kimchi.', 11.99),
+('Chicken Teriyaki Bowl', 'Grilled chicken with teriyaki sauce, rice, and veggies.', 10.99),
+('Tofu Veggie Bowl', 'Tofu with mixed vegetables, rice, and spicy gochujang sauce.', 9.99),
+('Bibimbap', 'Traditional Korean mixed rice bowl with assorted veggies and fried egg.', 13.99),
+('Kimchi Fried Rice', 'Fried rice with kimchi, vegetables, and choice of protein.', 9.49),
+('Korean BBQ Short Rib Bowl', 'Grilled short ribs with rice, kimchi, and vegetables.', 15.99),
+('Honey Garlic Shrimp Bowl', 'Shrimp with honey garlic sauce over rice.', 13.49),
+('Spicy Tofu Bowl', 'Crispy tofu with spicy sauce, rice, and veggies.', 10.49),
+('Korean Fried Chicken Bowl', 'Korean-style fried chicken with rice and pickled radish.', 12.49);
+
 
 -- Insert sample data into Reviews
 INSERT INTO Reviews (written_by, stars_given, description) VALUES
@@ -92,22 +98,48 @@ INSERT INTO Reviews (written_by, stars_given, description) VALUES
 (5, 4, 'Grilled Chicken Sandwich was very tasty and healthy.');
 
 -- Insert sample data into Orders
-INSERT INTO Orders (ordered_by, total_price, order_complete) VALUES
-(1, 24.99, TRUE),
-(2, 8.99, TRUE),
-(3, 14.99, FALSE),
-(4, 10.99, TRUE),
-(5, 11.99, FALSE);
+INSERT INTO Orders (ordered_by, date_ordered, total_price, order_complete) VALUES
+(1, '2024-10-31', 25.98, TRUE),
+(2, '2024-10-31', 15.99, FALSE),
+(3, '2024-10-31', 30.47, TRUE),
+(4, '2024-10-31', 18.49, TRUE),
+(5, '2024-10-31', 26.98, TRUE),
+(1, '2024-10-31', 13.99, FALSE),
+(2, '2024-10-31', 29.98, TRUE),
+(3, '2024-10-31', 19.99, TRUE),
+(4, '2024-10-31', 11.49, TRUE),
+(5, '2024-10-31', 15.99, FALSE),
+(1, '2024-10-31', 23.49, TRUE),
+(2, '2024-10-31', 27.98, TRUE),
+(3, '2024-10-31', 18.99, FALSE),
+(4, '2024-10-31', 21.99, TRUE),
+(5, '2024-10-31', 24.49, TRUE),
+(1, '2024-10-31', 16.99, FALSE),
+(2, '2024-10-31', 22.49, TRUE),
+(3, '2024-10-31', 29.98, TRUE),
+(4, '2024-10-31', 17.49, FALSE);
 
 -- Insert sample data into OrderItems
 INSERT INTO OrderItems (order_id, item_id) VALUES
-(1, 1),
-(1, 2),
-(2, 2),
-(3, 3),
-(4, 4),
-(5, 5);
-
+(1, 1), (1, 3),
+(2, 2), (2, 5),
+(3, 1), (3, 4), (3, 6),
+(4, 7), (4, 8),
+(5, 5), (5, 10),
+(6, 3), (6, 7),
+(7, 6), (7, 9),
+(8, 2), (8, 8),
+(9, 4), (9, 10),
+(10, 1), (10, 3), (10, 9),
+(11, 8), (11, 10),
+(12, 2), (12, 5), (12, 7),
+(13, 4), (13, 6),
+(14, 3), (14, 9), (14, 10),
+(15, 1), (15, 2), (15, 8),
+(16, 5), (16, 7),
+(17, 6), (17, 9), (17, 10),
+(18, 1), (18, 3),
+(19, 8), (19, 4);
 
 -- Insert sample data into Reservations 
 INSERT INTO Reservations (reservation_time, customer_id) VALUES

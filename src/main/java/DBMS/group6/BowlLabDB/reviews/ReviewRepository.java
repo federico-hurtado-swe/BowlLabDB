@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import DBMS.group6.BowlLabDB.reviews.models.Review;
 
-
 @Repository
 public class ReviewRepository {
 
@@ -24,13 +23,12 @@ public class ReviewRepository {
             rs.getInt("id"),
             rs.getInt("written_by"),
             rs.getInt("stars_given"),
-            rs.getString("description")
-    );
+            rs.getString("description"));
 
     // Create a new review
     public void createReview(Review review) {
-        String sql = "INSERT INTO Reviews (id, written_by, stars_given, description) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(sql, review.id(), review.written_by(), review.stars_given(), review.description());
+        String sql = "INSERT INTO Reviews (written_by, stars_given, description) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, review.written_by(), review.stars_given(), review.description());
     }
 
     // Retrieve all reviews
@@ -43,21 +41,21 @@ public class ReviewRepository {
     @SuppressWarnings("deprecation")
     public List<Review> findByCustomer(int customerId) {
         String sql = "SELECT * FROM Reviews WHERE written_by = ?";
-        return jdbcTemplate.query(sql, new Object[]{customerId}, rowMapperReview);
+        return jdbcTemplate.query(sql, new Object[] { customerId }, rowMapperReview);
     }
 
     // Retrieve reviews by date
     @SuppressWarnings("deprecation")
     public List<Review> findByDate(LocalDate date) {
         String sql = "SELECT * FROM Reviews WHERE date = ?";
-        return jdbcTemplate.query(sql, new Object[]{date}, rowMapperReview);
+        return jdbcTemplate.query(sql, new Object[] { date }, rowMapperReview);
     }
 
     // Check if a review exists by ID
     @SuppressWarnings("deprecation")
     public boolean findReview(int id) {
         String sql = "SELECT COUNT(*) FROM Reviews WHERE id = ?";
-        Integer count = jdbcTemplate.queryForObject(sql, new Object[]{id}, Integer.class);
+        Integer count = jdbcTemplate.queryForObject(sql, new Object[] { id }, Integer.class);
         return count != null && count > 0;
     }
 
@@ -66,7 +64,6 @@ public class ReviewRepository {
         String sql = "UPDATE Reviews SET stars_given = ?, description = ?, written_by = ? WHERE id = ?";
         jdbcTemplate.update(sql, review.stars_given(), review.description(), review.written_by(), review.id());
     }
-
 
     // Delete a review by ID
     public void deleteReviewById(int id) {
