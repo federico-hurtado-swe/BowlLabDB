@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
+import DBMS.group6.BowlLabDB.exceptions.EmailAlreadyExistsException;
 import DBMS.group6.BowlLabDB.customer.customerExceptions.CustomerNotFoundException;
-import DBMS.group6.BowlLabDB.customer.customerExceptions.EmailAlreadyExistsException;
+import DBMS.group6.BowlLabDB.exceptions.InvalidPasswordException;
 import DBMS.group6.BowlLabDB.customer.models.Customer;
 import DBMS.group6.BowlLabDB.customer.models.CustomerLoginCredentials;
 import jakarta.validation.Valid;
@@ -37,8 +37,7 @@ public class CustomerController {
 
     @GetMapping("/find/{id}")
     Customer find(@PathVariable Integer id) {
-        // TODO: implement this in customerService
-        return null;
+        return customerService.getCustomer(id);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -55,20 +54,21 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/delete/{id}")
     void delete(@PathVariable Integer id) {
-        // TODO: implement this in customerService
+        this.customerService.deleteCustomer(id);
     }
 
     /*
      * Customer log in endpoint.
      */
     @PostMapping("/login")
-    Customer logIn(@Valid @RequestBody CustomerLoginCredentials credentials) {
-        Customer customer = customerService.logIn(credentials.email(), credentials.password());
-
-        if (customer != null) {
-            return customer;
-        } else {
-            return null; // return null if customer not found
+    ResponseEntity<Customer> logIn(@Valid @RequestBody CustomerLoginCredentials credentials) {
+        try {
+            Customer customer = customerService.logIn(credentials.getEmail(), credentials.getPasskey());
+            return ResponseEntity.ok(customer); // Return 200 OK with the customer details
+        } catch (InvalidPasswordException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // Return 401 Unauthorized
+        } catch (CustomerNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Return 404 Not Found
         }
     }
 
@@ -85,6 +85,13 @@ public class CustomerController {
     @ExceptionHandler(CustomerNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleCustomerNotFound(CustomerNotFoundException ex) {
+        return ex.getMessage();
+    }
+
+    // Handle InvalidPasswordException and return a 401 Unauthorized response
+    @ExceptionHandler(InvalidPasswordException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public String handleInvalidPassword(InvalidPasswordException ex) {
         return ex.getMessage();
     }
 

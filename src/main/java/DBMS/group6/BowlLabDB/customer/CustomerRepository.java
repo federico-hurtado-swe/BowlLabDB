@@ -42,22 +42,21 @@ public class CustomerRepository {
      * Create a new customer
      */
     public void create(Customer customer) {
-
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO Customers(firstName, lastName, email, phone, passkey) VALUES (?,?,?,?,?)");
-
-            ps.setString(1, customer.firstName());
-            ps.setString(2, customer.lastName());
-            ps.setString(3, customer.email().toLowerCase());
-            ps.setString(4, customer.phone());
-            ps.setString(5, customer.passkey());
+            ps.setString(1, customer.getFirstName());
+            ps.setString(2, customer.getLastName());
+            ps.setString(3, customer.getEmail().toLowerCase());
+            ps.setString(4, customer.getPhone());
+            ps.setString(5, customer.getPasskey());
             return ps;
         });
 
         // Since we are not using KeyHolder, we do not get the generated ID back.
         Assert.state(true, "Failed to create customer");
     }
+
 
     /*
      * Return true if a customer w/ a given email exists
@@ -115,15 +114,26 @@ public class CustomerRepository {
         String sql = "UPDATE Customers SET firstName = ?, lastName = ?, email = ?, phone = ?, passkey = ? WHERE id = ?";
 
         int rowsUpdated = jdbcTemplate.update(sql,
-                customer.firstName(),
-                customer.lastName(),
-                customer.email().toLowerCase(),
-                customer.phone(),
-                customer.passkey(),
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getEmail().toLowerCase(),
+                customer.getPhone(),
+                customer.getPasskey(),
                 id);
 
         // Verify the update was successful
         Assert.state(rowsUpdated == 1, "Failed to update customer with ID " + id);
+    }
+
+    /*
+     * Delete a customer by ID
+     */
+    public void deleteCustomer(Integer id) {
+        String sql = "DELETE FROM Customers WHERE id = ?";
+        int rowsDeleted = jdbcTemplate.update(sql, id);
+
+        // Verify the deletion was successful
+        Assert.state(rowsDeleted == 1, "Failed to delete customer with ID " + id);
     }
 
 }

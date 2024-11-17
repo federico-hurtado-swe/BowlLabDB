@@ -38,68 +38,29 @@ public class EmployeeRepository {
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO Employees(firstName, lastName, email, phone, addr, passkey) VALUES (?,?,?,?,?,?)");
-            ps.setString(1, employee.firstName());
-            ps.setString(2, employee.lastName());
-            ps.setString(3, employee.email().toLowerCase());
-            ps.setString(4, employee.phone());
-            ps.setString(5, employee.addr());
-            ps.setString(6, employee.passkey());
+            ps.setString(1, employee.getFirstName());
+            ps.setString(2, employee.getLastName());
+            ps.setString(3, employee.getEmail().toLowerCase());
+            ps.setString(4, employee.getPhone());
+            ps.setString(5, employee.getAddr());
+            ps.setString(6, employee.getPasskey());
             return ps;
         });
     }
 
     /*
-     * Find employee by ID
+     * Return true if a employee w/ a given email exists
      */
-    @SuppressWarnings("deprecation")
-    public Employee findById(int id) {
-        String sql = "SELECT * FROM Employees WHERE id = ?";
-        try {
-            return jdbcTemplate.queryForObject(sql, new Object[] { id }, (rs, rowNum) -> new Employee(
-                    rs.getInt("id"),
-                    rs.getString("firstName"),
-                    rs.getString("lastName"),
-                    rs.getString("email"),
-                    rs.getString("phone"),
-                    rs.getString("addr"),
-                    rs.getString("passkey")));
-        } catch (EmptyResultDataAccessException e) {
-            return null; // employee not found
-        }
-    }
+    public boolean emailExistsInDB(String email) {
 
-    /*
-     * Update an existing employee
-     */
-    public void update(Employee employee) {
-        String sql = "UPDATE Employees SET firstName = ?, lastName = ?, email = ?, phone = ?, addr = ?, passkey = ? WHERE id = ?";
-        jdbcTemplate.update(sql,
-                employee.firstName(),
-                employee.lastName(),
-                employee.email().toLowerCase(),
-                employee.phone(),
-                employee.addr(),
-                employee.passkey(),
-                employee.id());
-    }
+        Integer count = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM Employees WHERE email = ?",
+                Integer.class,
+                email.toLowerCase());
 
-    /*
-     * Delete an employee by ID
-     */
-    public void delete(Long id) {
-        String sql = "DELETE FROM Employees WHERE id = ?";
-        jdbcTemplate.update(sql, id);
-    }
-
-    /*
-     * Validate login credentials (email and password)
-     */
-    @SuppressWarnings("deprecation")
-    public boolean validateLogin(String email, String password) {
-        String sql = "SELECT COUNT(*) FROM Employees WHERE email = ? AND passkey = ?";
-        Integer count = jdbcTemplate.queryForObject(sql, new Object[] { email.toLowerCase(), password }, Integer.class);
         return count != null && count > 0;
     }
+
 
     /*
      * Find Employee in the DB by using their email.
@@ -121,4 +82,59 @@ public class EmployeeRepository {
             return null; // employee not found
         }
     }
+
+    /*
+     * Find employee by ID
+     */
+    @SuppressWarnings("deprecation")
+    public Employee getEmployeeById(int id) {
+        String sql = "SELECT * FROM Employees WHERE id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[] { id }, (rs, rowNum) -> new Employee(
+                    rs.getInt("id"),
+                    rs.getString("firstName"),
+                    rs.getString("lastName"),
+                    rs.getString("email"),
+                    rs.getString("phone"),
+                    rs.getString("addr"),
+                    rs.getString("passkey")));
+        } catch (EmptyResultDataAccessException e) {
+            return null; // employee not found
+        }
+    }
+
+    /*
+     * Update an existing employee
+     */
+    public void updateEmployee(Employee employee) {
+        String sql = "UPDATE Employees SET firstName = ?, lastName = ?, email = ?, phone = ?, addr = ?, passkey = ? WHERE id = ?";
+        jdbcTemplate.update(sql,
+                employee.getFirstName(),
+                employee.getLastName(),
+                employee.getEmail().toLowerCase(),
+                employee.getPhone(),
+                employee.getAddr(),
+                employee.getPasskey(),
+                employee.getId());
+    }
+
+    /*
+     * Delete an employee by ID
+     */
+    public void deleteEmployee(Long id) {
+        String sql = "DELETE FROM Employees WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    /*
+     * Validate login credentials (email and password)
+     */
+    @SuppressWarnings("deprecation")
+    public boolean validateLogin(String email, String password) {
+        String sql = "SELECT COUNT(*) FROM Employees WHERE email = ? AND passkey = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, new Object[] { email.toLowerCase(), password }, Integer.class);
+        return count != null && count > 0;
+    }
+
+
 }

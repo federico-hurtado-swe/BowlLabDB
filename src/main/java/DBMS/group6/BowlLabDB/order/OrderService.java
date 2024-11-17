@@ -84,8 +84,8 @@ public class OrderService {
             String customerName;
             String customerEmail;
             if (customer != null) {
-                customerName = customer.firstName() + " " + customer.lastName();
-                customerEmail = customer.email();
+                customerName = customer.getFirstName() + " " + customer.getLastName();
+                customerEmail = customer.getEmail();
             } else {
                 customerName = "Guest";
                 customerEmail = "N/A";

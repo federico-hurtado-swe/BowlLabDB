@@ -1,4 +1,4 @@
-package DBMS.group6.BowlLabDB.customer.customerExceptions;
+package DBMS.group6.BowlLabDB.exceptions;
 
 /*
  * Custom exception to throw when a customer tries to register

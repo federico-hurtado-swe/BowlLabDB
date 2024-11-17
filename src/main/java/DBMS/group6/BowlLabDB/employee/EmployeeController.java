@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import DBMS.group6.BowlLabDB.employee.models.EmployeeLoginCredentials;
+import DBMS.group6.BowlLabDB.employee.employeeExceptions.EmployeeNotFoundException;
+import DBMS.group6.BowlLabDB.exceptions.InvalidPasswordException;
 import DBMS.group6.BowlLabDB.employee.models.Employee;
+import DBMS.group6.BowlLabDB.employee.models.EmployeeLoginCredentials;
 import jakarta.validation.Valid;
 
 @RestController
@@ -62,17 +65,29 @@ public class EmployeeController {
     }
 
     // /login
-    /*
-     * Customer log in endpoint.
-     */
     @PostMapping("/login")
-    Employee logIn(@Valid @RequestBody EmployeeLoginCredentials credentials) {
-        Employee employee = employeeService.logIn(credentials.email(), credentials.password());
-
-        if (employee != null) {
-            return employee;
-        } else {
-            return null;
+    ResponseEntity<Employee> logIn(@Valid @RequestBody EmployeeLoginCredentials credentials) {
+        try {
+            Employee employee = employeeService.logIn(credentials.getEmail(), credentials.getPasskey());
+            return ResponseEntity.ok(employee); // Return 200 OK with the employee details
+        } catch (InvalidPasswordException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // Return 401 Unauthorized
+        } catch (EmployeeNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Return 404 Not Found
         }
+    }
+
+    // --------- Exception Handling --------------
+
+    // Exception handler for InvalidPasswordException
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<String> handleInvalidPassword(InvalidPasswordException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
+    // Exception handler for EmployeeNotFoundException
+    @ExceptionHandler(EmployeeNotFoundException.class)
+    public ResponseEntity<String> handleEmployeeNotFound(EmployeeNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }
