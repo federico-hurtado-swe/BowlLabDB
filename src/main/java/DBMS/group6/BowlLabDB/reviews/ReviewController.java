@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/reviews")
@@ -67,5 +68,12 @@ public class ReviewController {
         else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Review not found.");
         }
+    }
+
+    // Get review report
+    @GetMapping("/review-report")
+    public ResponseEntity<Map<Integer, Integer>> getReviewReport() {
+        Map<Integer, Integer> reviewReport = reviewService.getReviewReport();
+        return ResponseEntity.ok(reviewReport);
     }
 }

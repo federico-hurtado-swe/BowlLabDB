@@ -1,7 +1,9 @@
 package DBMS.group6.BowlLabDB.reviews;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -70,4 +72,5 @@ public class ReviewRepository {
         String sql = "DELETE FROM Reviews WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
+
 }
