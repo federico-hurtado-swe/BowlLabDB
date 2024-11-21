@@ -1,10 +1,13 @@
 package DBMS.group6.BowlLabDB.order;
-
+import java.util.Map;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 
 import org.springframework.stereotype.Service;
 
@@ -113,5 +116,20 @@ public class OrderService {
         }
 
         return fullOrders;
+    }
+
+    // Get revenue report
+    public List<Map<String, Object>> getRevenueReport() {
+        List<Map<String, Object>> rawData = orderRepository.getRevenueReport();
+
+        for (Map<String, Object> row : rawData) {
+            Double totalRevenue = ((Number) row.get("total_revenue")).doubleValue();
+            
+            // Round to the hundredths place
+            BigDecimal roundedRevenue = new BigDecimal(totalRevenue).setScale(2, RoundingMode.HALF_UP);
+            row.put("total_revenue", roundedRevenue.doubleValue());
+        }
+
+        return rawData;
     }
 }

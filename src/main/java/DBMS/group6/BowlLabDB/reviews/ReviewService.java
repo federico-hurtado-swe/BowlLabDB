@@ -54,18 +54,21 @@ public class ReviewService {
 
     // Get review report
     public Map<Integer, Integer> getReviewReport() {
-        List<Review> reviews = reviewRepository.findAll();
+        List<Map<String, Object>> rawData = reviewRepository.getReviewSummary();
 
-        // Initialize a map with all star ratings (1-5) defaulting to 0
+        // Create a Map to store star ratings and their counts
         Map<Integer, Integer> reviewReport = new HashMap<>();
+
+        // Initialize all star ratings (1-5) with 0
         for (int i = 1; i <= 5; i++) {
             reviewReport.put(i, 0);
         }
 
-        // Populate the map with actual counts
-        for (Review review : reviews) {
-            int starsGiven = review.stars_given();
-            reviewReport.put(starsGiven, reviewReport.getOrDefault(starsGiven, 0) + 1);
+        // Populate the Map with data from the database
+        for (Map<String, Object> row : rawData) {
+            Integer starRating = (Integer) row.get("star_rating"); // Cast to Integer
+            Integer totalReviews = ((Long) row.get("total_reviews")).intValue(); // Convert to Integer
+            reviewReport.put(starRating, totalReviews);
         }
 
         return reviewReport;

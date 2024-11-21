@@ -73,4 +73,10 @@ public class ReviewRepository {
         jdbcTemplate.update(sql, id);
     }
 
+    // Get review report 
+    public List<Map<String, Object>> getReviewSummary() {
+        String sql = "SELECT stars_given AS star_rating, COUNT(*) AS total_reviews FROM Reviews GROUP BY stars_given ORDER BY star_rating";
+        return jdbcTemplate.queryForList(sql);
+    }
+
 }

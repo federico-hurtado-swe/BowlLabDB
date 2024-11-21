@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -76,6 +77,12 @@ public class OrderController {
                 .toList();
 
         this.orderService.createOrder(custID, orderItems);
+    }
+
+    @GetMapping("/revenue-report")
+    public ResponseEntity<List<Map<String, Object>>> getRevenueReport() {
+        List<Map<String, Object>> revenueReport = orderService.getRevenueReport();
+        return ResponseEntity.ok(revenueReport);
     }
 
 }

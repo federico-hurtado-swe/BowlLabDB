@@ -1,5 +1,5 @@
 package DBMS.group6.BowlLabDB.order;
-
+import java.util.Map;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
@@ -120,5 +120,11 @@ public class OrderRepository {
     public List<Integer> getOrderItemsByOrderId(int orderId) {
         String sql = "SELECT item_id FROM OrderItems WHERE order_id = ?";
         return jdbcTemplate.query(sql, new Object[] { orderId }, (rs, rowNum) -> rs.getInt("item_id"));
+    }
+
+    // Get revenue report
+    public  List<Map<String, Object>> getRevenueReport() {
+        String sql = "SELECT DATE(date_ordered) AS order_date, SUM(total_price) AS total_revenue FROM Orders WHERE order_complete = TRUE GROUP BY DATE(date_ordered) ORDER BY order_date DESC";
+        return jdbcTemplate.queryForList(sql);
     }
 }
